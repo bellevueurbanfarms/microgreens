@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresh Microgreens - Premium Organic Microgreens</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Floating Navigation -->
+    <nav class="floating-nav">
+        <div class="nav-container">
+            <div class="logo">🌱 Fresh Microgreens</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#order">Order</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="mobile-menu-toggle">☰</div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Fresh, Organic Microgreens</h1>
+            <p>Nutrient-dense superfoods grown with care, delivered to your door</p>
+            <a href="#products" class="cta-button">Shop Now</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>Why Choose Our Microgreens?</h2>
+            <div class="features">
+                <div class="feature">
+                    <span class="icon">🌿</span>
+                    <h3>100% Organic</h3>
+                    <p>Grown without pesticides or chemicals</p>
+                </div>
+                <div class="feature">
+                    <span class="icon">💚</span>
+                    <h3>Nutrient-Rich</h3>
+                    <p>Packed with vitamins and minerals</p>
+                </div>
+                <div class="feature">
+                    <span class="icon">🚚</span>
+                    <h3>Fresh Delivery</h3>
+                    <p>Harvested and delivered within 24 hours</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products">
+        <div class="container">
+            <h2>Our Products</h2>
+            <div class="product-grid" id="productGrid">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Section -->
+    <section id="order" class="order">
+        <div class="container">
+            <h2>Place Your Order</h2>
+            <div class="order-container">
+                <div class="cart-summary" id="cartSummary">
+                    <h3>Your Cart</h3>
+                    <div id="cartItems">
+                        <p class="empty-cart">Your cart is empty</p>
+                    </div>
+                    <div class="cart-total">
+                        <strong>Total: $<span id="cartTotal">0.00</span></strong>
+                    </div>
+                </div>
+                
+                <form id="orderForm" class="order-form">
+                    <h3>Delivery Information</h3>
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone *</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Delivery Address *</label>
+                        <textarea id="address" name="address" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Special Instructions</label>
+                        <textarea id="notes" name="notes" rows="2"></textarea>
+                    </div>
+                    
+                    <div id="payment-element"></div>
+                    
+                    <button type="submit" class="submit-button" id="submitButton">
+                        Complete Order
+                    </button>
+                    <div id="orderMessage"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Get In Touch</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span class="icon">📧</span>
+                    <p>info@freshmicrogreens.com</p>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">📱</span>
+                    <p>(555) 123-4567</p>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">📍</span>
+                    <p>123 Green Street, Farm City, FC 12345</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Fresh Microgreens. All rights reserved.</p>
+    </footer>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="script.js"></script>
+</body>
+</html>
