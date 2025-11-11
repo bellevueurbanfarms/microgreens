@@ -19,7 +19,7 @@ const products = [
         name: "Radish Microgreens",
         description: "Spicy kick with vibrant color, high in antioxidants",
         price: 6.99,
-        icon: "🌶️"
+        icon: "🫜"
     },
     {
         id: 4,
