@@ -1,45 +1,76 @@
-// Product Data
+// Size options with clamshell dimensions
+const sizeOptions = {
+    '2oz': { label: '2 oz', clamshell: '5×5×3"' },
+    '8oz': { label: '8 oz', clamshell: '8×8×3.5"' },
+    '1lb': { label: '1 lb', clamshell: '12×8×4"' }
+};
+
+// Product Data with multiple sizes
 const products = [
     {
         id: 1,
         name: "Sunflower Microgreens",
         description: "Crunchy and nutty, perfect for salads and sandwiches",
-        price: 8.99,
+        prices: {
+            '2oz': 8.00,
+            '8oz': 30.00,
+            '1lb': 50.00
+        },
         icon: "🌻"
     },
     {
         id: 2,
         name: "Pea Shoots",
         description: "Sweet and tender, rich in vitamins A, C, and folate",
-        price: 7.99,
+        prices: {
+            '2oz': 8.00,
+            '8oz': 30.00,
+            '1lb': 50.00
+        },
         icon: "🌱"
     },
     {
         id: 3,
         name: "Radish Microgreens",
         description: "Spicy kick with vibrant color, high in antioxidants",
-        price: 6.99,
-        icon: "🫜"
+        prices: {
+            '2oz': 10.00,
+            '8oz': 35.00,
+            '1lb': 60.00
+        },
+        icon: "🌶️"
     },
     {
         id: 4,
         name: "Broccoli Microgreens",
         description: "Mild flavor, packed with sulforaphane for health",
-        price: 9.99,
+        prices: {
+            '2oz': 12.00,
+            '8oz': 40.00,
+            '1lb': 70.00
+        },
         icon: "🥦"
     },
     {
         id: 5,
         name: "Kale Microgreens",
         description: "Nutrient powerhouse with earthy flavor",
-        price: 8.49,
+        prices: {
+            '2oz': 12.00,
+            '8oz': 40.00,
+            '1lb': 70.00
+        },
         icon: "🥬"
     },
     {
         id: 6,
         name: "Mixed Variety Pack",
         description: "A blend of our best sellers for variety",
-        price: 12.99,
+        prices: {
+            '2oz': 12.00,
+            '8oz': 45.00,
+            '1lb': 75.00
+        },
         icon: "🌿"
     }
 ];
@@ -47,12 +78,23 @@ const products = [
 // Cart Management
 let cart = [];
 
+// Background Images for Hero Section
+const heroBackgrounds = [
+    'https://raw.githubusercontent.com/bellevueurbanfarms/microgreens/main/1.jpg',
+    'https://raw.githubusercontent.com/bellevueurbanfarms/microgreens/main/2.jpg',
+    'https://raw.githubusercontent.com/bellevueurbanfarms/microgreens/main/3.jpg',
+    'https://raw.githubusercontent.com/bellevueurbanfarms/microgreens/main/4.jpg',
+    'https://raw.githubusercontent.com/bellevueurbanfarms/microgreens/main/5.jpg',
+    'https://raw.githubusercontent.com/bellevueurbanfarms/microgreens/main/6.jpg'
+];
+
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
     loadProducts();
     setupNavigation();
     setupMobileMenu();
     setupOrderForm();
+    initBackgroundRotation();
 });
 
 // Load Products
@@ -67,7 +109,19 @@ function loadProducts() {
             <div class="product-info">
                 <h3>${product.name}</h3>
                 <p>${product.description}</p>
-                <div class="product-price">$${product.price.toFixed(2)}</div>
+                
+                <div class="size-selector">
+                    <label>Select Size:</label>
+                    <select id="size-${product.id}" onchange="updatePrice(${product.id})">
+                        <option value="2oz">2 oz</option>
+                        <option value="8oz">8 oz</option>
+                        <option value="1lb">1 lb</option>
+                    </select>
+                </div>
+                
+                <div class="product-price" id="price-${product.id}">$${product.prices['2oz'].toFixed(2)}</div>
+                <div class="clamshell-info" id="clamshell-${product.id}">Clamshell size: ${sizeOptions['2oz'].clamshell}</div>
+                
                 <button class="add-to-cart" onclick="addToCart(${product.id})">
                     Add to Cart
                 </button>
@@ -77,15 +131,41 @@ function loadProducts() {
     });
 }
 
+// Update price when size changes
+function updatePrice(productId) {
+    const product = products.find(p => p.id === productId);
+    const sizeSelect = document.getElementById(`size-${productId}`);
+    const selectedSize = sizeSelect.value;
+    const priceElement = document.getElementById(`price-${productId}`);
+    const clamshellElement = document.getElementById(`clamshell-${productId}`);
+    
+    priceElement.textContent = `$${product.prices[selectedSize].toFixed(2)}`;
+    clamshellElement.textContent = `Clamshell size: ${sizeOptions[selectedSize].clamshell}`;
+}
+
 // Add to Cart
 function addToCart(productId) {
     const product = products.find(p => p.id === productId);
-    const existingItem = cart.find(item => item.id === productId);
+    const sizeSelect = document.getElementById(`size-${productId}`);
+    const selectedSize = sizeSelect.value;
+    const price = product.prices[selectedSize];
+    
+    const cartItemKey = `${productId}-${selectedSize}`;
+    const existingItem = cart.find(item => item.cartKey === cartItemKey);
     
     if (existingItem) {
         existingItem.quantity++;
     } else {
-        cart.push({ ...product, quantity: 1 });
+        cart.push({
+            cartKey: cartItemKey,
+            id: productId,
+            name: product.name,
+            size: selectedSize,
+            sizeLabel: sizeOptions[selectedSize].label,
+            clamshell: sizeOptions[selectedSize].clamshell,
+            price: price,
+            quantity: 1
+        });
     }
     
     updateCart();
@@ -115,6 +195,7 @@ function updateCart() {
             <div class="cart-item">
                 <div>
                     <strong>${item.name}</strong><br>
+                    <small>${item.sizeLabel} (${item.clamshell})</small><br>
                     <small>Qty: ${item.quantity} × $${item.price.toFixed(2)}</small>
                 </div>
                 <div>$${itemTotal.toFixed(2)}</div>
@@ -178,12 +259,6 @@ function setupOrderForm() {
             total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
         };
         
-        // Simulate order processing
-        // In production, replace this with actual API calls to:
-        // 1. Your backend server
-        // 2. Stripe payment processing
-        // 3. Order management system (e.g., ShipStation, OrderDesk)
-        
         try {
             await processOrder(orderData);
             showMessage('Order placed successfully! You will receive a confirmation email shortly.', 'success');
@@ -201,29 +276,9 @@ function setupOrderForm() {
 
 // Process Order (Mock Implementation)
 async function processOrder(orderData) {
-    // Simulate API call
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         setTimeout(() => {
             console.log('Order Data:', orderData);
-            
-            // In production, you would:
-            // 1. Send order to your backend API
-            // 2. Process payment with Stripe
-            // 3. Create order in your order management system
-            // 4. Send confirmation email
-            
-            // Example API call structure:
-            /*
-            fetch('/api/orders', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(orderData)
-            })
-            .then(response => response.json())
-            .then(data => resolve(data))
-            .catch(error => reject(error));
-            */
-            
             resolve({ success: true, orderId: 'ORD-' + Date.now() });
         }, 1500);
     });
@@ -234,6 +289,7 @@ function showMessage(message, type) {
     const messageDiv = document.getElementById('orderMessage');
     messageDiv.textContent = message;
     messageDiv.className = type;
+    messageDiv.style.display = 'block';
     
     setTimeout(() => {
         messageDiv.style.display = 'none';
@@ -241,29 +297,17 @@ function showMessage(message, type) {
     }, 5000);
 }
 
-// Stripe Integration (Placeholder)
-// To enable Stripe payments:
-// 1. Sign up at stripe.com
-// 2. Get your publishable key
-// 3. Uncomment and configure the code below
-
-/*
-const stripe = Stripe('your_publishable_key_here');
-let elements;
-
-async function initializeStripe() {
-    const response = await fetch('/api/create-payment-intent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            amount: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 100 
-        })
+// Background Rotation
+function initBackgroundRotation() {
+    const hero = document.querySelector('.hero');
+    
+    // Create background divs for all images
+    heroBackgrounds.forEach((bgUrl, i) => {
+        const bgDiv = document.createElement('div');
+        bgDiv.className = 'hero-background';
+        bgDiv.style.backgroundImage = `url('${bgUrl}')`;
+        bgDiv.style.animationDelay = `${i * (20 / heroBackgrounds.length)}s`;
+        bgDiv.style.animationDuration = '20s';
+        hero.insertBefore(bgDiv, hero.firstChild);
     });
-    
-    const { clientSecret } = await response.json();
-    elements = stripe.elements({ clientSecret });
-    
-    const paymentElement = elements.create('payment');
-    paymentElement.mount('#payment-element');
 }
-*/
