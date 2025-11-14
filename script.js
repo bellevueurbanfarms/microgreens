@@ -38,7 +38,7 @@ const products = [
             '8oz': 35.00,
             '1lb': 60.00
         },
-        icon: "🌶️"
+        icon: "🫜"
     },
     {
         id: 4,
